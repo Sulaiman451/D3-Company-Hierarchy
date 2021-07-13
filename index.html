@@ -17,6 +17,44 @@
     <title>Toretto's</title>
   </head>
   <body>
+    <div class="blue darken-4 section">
+      <h2 class="white-text center">Toretto's</h2>
+    </div>
+
+    <div class="grey lighten-3 section grey-text" style="position: relative">
+      <p class="flow-text center">Your one-stop shop for the SICKEST whips!</p>
+      <a
+        href="#modal"
+        class="btn-floating btn-large halfway-fab blue darken-4 modal-trigger"
+      >
+        <i class="material-icons">add</i>
+      </a>
+    </div>
+
+    <div id="modal" class="modal">
+      <div class="model-content">
+        <h4 class="blue-text text-darken-4">Add New Employee</h4>
+        <form>
+          <div class="input-field">
+            <input type="text" id="name" placeholder="Employee Name" />
+          </div>
+          <div class="input-field">
+            <input type="text" id="parent" placeholder="Reports to..." />
+          </div>
+          <div class="input-field">
+            <input type="text" id="department" placeholder="Department" />
+            <div class="input-field">
+              <button class="btn blue darken-4 white-text">Add Employee</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="canvas"></div>
+    </div>
+
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
