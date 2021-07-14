@@ -8,7 +8,7 @@ const svg = d3
 
 const graph = svg.append("g").attr("transform", "translate(50, 50)");
 
-// data strat
+// tree and stratify
 const stratify = d3
   .stratify()
   .id((d) => d.name)
@@ -16,27 +16,34 @@ const stratify = d3
 
 const tree = d3.tree().size([dims.width, dims.height]);
 
+// create ordinal scale
+const colour = d3.scaleOrdinal(["#f4511e", "#e91e63", "#e53935", "#9c27b0"]);
+
 // update function
 const update = (data) => {
   // remove current nodes
   graph.selectAll(".node").remove();
   graph.selectAll(".link").remove();
 
-  // get updated root node data
-  const rootNode = stratify(data);
+  // update ordinal scale domain
+  colour.domain(data.map((d) => d.department));
 
-  const treeData = tree(rootNode);
+  // get updated root Node data
+  const rootNode = stratify(data);
+  const treeData = tree(rootNode).descendants();
 
   // get nodes selection and join data
-  const nodes = graph.selectAll(".node").data(treeData.descendants());
+  const nodes = graph.selectAll(".node").data(treeData);
 
-  // get link selection and join data
-  const links = graph.selectAll(".link").data(treeData.links());
+  // get link selection and join new data
+  const link = graph.selectAll(".link").data(tree(rootNode).links());
 
   // enter new links
-  links
+  link
     .enter()
     .append("path")
+    .transition()
+    .duration(300)
     .attr("class", "link")
     .attr("fill", "none")
     .attr("stroke", "#aaa")
@@ -59,20 +66,21 @@ const update = (data) => {
   // append rects to enter nodes
   enterNodes
     .append("rect")
-    .attr("fill", "#aaa")
+    // apply the ordinal scale for fill
+    .attr("fill", (d) => colour(d.data.department))
     .attr("stroke", "#555")
     .attr("stroke-width", 2)
-    .attr("height", 50)
     .attr("width", (d) => d.data.name.length * 20)
-    .attr("transform", (d) => {
-      var x = d.data.name.length * 10;
-      return `translate(${-x}, -32)`;
+    .attr("height", 50)
+    .attr("transform", (d, i, n) => {
+      let x = d.data.name.length * 10;
+      return `translate(${-x}, -25)`;
     });
 
-  // append name text
   enterNodes
     .append("text")
     .attr("text-anchor", "middle")
+    .attr("dy", 5)
     .attr("fill", "white")
     .text((d) => d.data.name);
 };
